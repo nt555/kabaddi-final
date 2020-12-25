@@ -15,10 +15,23 @@ function setup(){
   database = firebase.database();
   createCanvas(600,600);
 
+
+  reset = createButton("Reset");
+  reset.position(20, 20);
+  reset.mousePressed(() => {
+    database.ref("/").update({
+      gameState: 0,
+      player1Score: 0,
+      player2Score: 0,
+      player1: null,
+      player2: null,
+    });
+  });
+
   player1 = createSprite(300,250,10,10);
  
   player1.addAnimation("walking",player1animation);
-  player1animation.frameDelay = 200
+  player1animation.frameDelay = 500
   player1.scale = 0.5
   player1.setCollider("circle", 0,0,60)
  
@@ -49,7 +62,24 @@ function setup(){
 }
 
 function draw(){
-  background("darkgreen");
+  background("green");
+  for(var i = 0; i<600; i=i+20){
+    stroke("yellow");
+    strokeWeight(4)
+    line (100,i,100,i+10)
+  }
+  
+  for(var i = 0; i<600; i=i+20){
+    stroke("black");
+    strokeWeight(4)
+    line (310,i,320,i+10)
+  }
+
+  for(var i = 0; i<600; i=i+20){
+    stroke("red");
+    strokeWeight(4);
+    line (500,i,500,i+10)
+  }
 
   if(gameState === 0){
     fill("black")
@@ -177,6 +207,7 @@ function draw(){
   // text to display score of both the players
     textSize(15)
     stroke("white");
+    strokeWeight(0)
     fill("white");
     text("RED: "+player1Score,350,15);
     text("YELLOW: "+player2Score,150,15);
@@ -189,13 +220,7 @@ function draw(){
     })
     
     }
-
-    drawlineMid();
-    drawlineLeft();
-    drawlineRight();
-
     drawSprites();
-  
 }
 //to update the position of player1
 function writePosition(x,y){
@@ -236,26 +261,3 @@ function readScore2(data2){
   player2Score = data2.val();
 }
 
-//to draw the left line
-function drawlineLeft(){
-  for(var i = 0; i<600; i=i+20){
-    stroke("yellow");
-    strokeWeight(4)
-    line (100,i,100,i+10)
-  }
-}
-//to draw the middle line
-function drawlineMid(){
-  for(var i = 0; i<600; i=i+20){
-    strokeWeight(4)
-    line (310,i,320,i+10)
-  }
-}
-// to draw the right line
-function drawlineRight(){
-  for(var i = 0; i<600; i=i+20){
-    stroke("red");
-    strokeWeight(4);
-    line (500,i,500,i+10)
-  }
-}
